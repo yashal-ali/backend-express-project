@@ -6,12 +6,14 @@
 //   }
 // };
 
-const asynHandler= (requestHandler)=>{
-    (req,res,next)=>{
-        Promise.resolve(requestHandler(req,res,next))
-        .catch((err)=>{
-            console.log('err', err)
-            err.next
-        })
-    }
-}
+const asyncHandler = (requestHandler) => {
+    return (req, res, next) => {
+        Promise.resolve(requestHandler(req, res, next))
+            .catch((err) => {
+                console.error('Error:', err);
+                next(err); // Forward the error to Express's error-handling middleware
+            });
+    };
+};
+
+export { asyncHandler };
